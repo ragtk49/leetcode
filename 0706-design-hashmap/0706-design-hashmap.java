@@ -1,20 +1,64 @@
 class MyHashMap {
-    int[] data;
+    class Node{
+        int key;
+        int val;
+        Node next;
+        public Node(int key,int val){
+            this.key = key;
+            this.val = val;
+        }
+    }
+    
+    Node nodes[]; 
+    int buckets;
     public MyHashMap() {
-        data = new int[1000001];
-        Arrays.fill(data,-1);
+        buckets = 10000;
+        nodes = new Node[buckets];
+    }
+    
+    private int index(int key){
+        return Integer.hashCode(key) % buckets;
+    }
+    
+    private Node find(int key, Node node){
+        Node prev = null;
+        Node curr = node;
+        while(curr != null && curr.key != key){
+            prev = curr;
+            curr = curr.next;
+        }
+        return prev;
+        
     }
     
     public void put(int key, int value) {
-        data[key] = value;
+        int index = index(key);
+        if(nodes[index] == null){
+            nodes[index] = new Node(-1,-1);
+        }
+        Node prev = find(key, nodes[index]);
+        if(prev.next == null){
+            prev.next = new Node(key, value);
+        }
+        else{
+            prev.next.val = value;
+        }
     }
     
     public int get(int key) {
-        return data[key];
+        int index = index(key);
+        if(nodes[index] == null) return -1;
+        Node prev = find(key, nodes[index]);
+        if(prev.next == null) return -1;
+        return prev.next.val;
     }
     
     public void remove(int key) {
-        data[key] = -1;
+        int index = index(key);
+        if(nodes[index] == null) return;
+        Node prev = find(key, nodes[index]);
+        if(prev.next == null) return;
+        else prev.next = prev.next.next;
     }
 }
 
