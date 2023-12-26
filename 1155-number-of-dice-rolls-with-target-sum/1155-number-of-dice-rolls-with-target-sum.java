@@ -2,22 +2,26 @@ class Solution {
     final int MOD = 1000000007;
     public int numRollsToTarget(int n, int k, int target) {
         Integer[][] cache = new Integer[n+1][target+1];
-        return numOfWays(cache, 0, n, 0, target, k);
+        return numOfWays(cache, n, target, k);
     }
     
-    private int numOfWays(Integer[][] cache, int diceIndex, int dice, int currSum, int target, int k){
-        if(diceIndex == dice){
-            return currSum == target ? 1 : 0; 
-        }
-        
-        if(cache[diceIndex][currSum] != null){
-            return cache[diceIndex][currSum];
+    private int numOfWays(Integer[][] cache, int dice, int target, int k){
+        if(dice == 0){
+            return target == 0 ? 1 : 0; 
         }
         
         int ways = 0;
-        for(int i = 1; i <= Math.min(k, target - currSum); i++){
-            ways = (ways + numOfWays(cache, diceIndex + 1, dice, currSum + i, target, k)) % MOD;
+        
+        if(cache[dice][target] != null){
+            return cache[dice][target];
         }
-        return cache[diceIndex][currSum] = ways;
+        
+        for(int i = 1; i <= k; i++){
+            if(target - i >= 0) {
+                ways = (ways + numOfWays(cache, dice - 1, target - i, k)) % MOD;
+            }
+        }
+        cache[dice][target] = ways;
+        return ways;
     }
 }
