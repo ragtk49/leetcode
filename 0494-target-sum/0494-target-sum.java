@@ -8,7 +8,7 @@ class Solution {
         this.nums = nums;
         this.target = target;
         total = Arrays.stream(nums).sum();
-        cache = new int[nums.length + 1][2 * total + 1];
+        cache = new int[nums.length + 1][2 * total+1];
         
         if(nums == null) return 0;
         return helper(0, 0);
