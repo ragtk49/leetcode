@@ -5,6 +5,7 @@ class Solution {
     public int findTargetSumWays(int[] nums, int target) {
         this.nums = nums;
         this.target = target;
+        if(nums == null) return 0;
         return helper(0, 0);
     }
     private int helper(int index, int sum){
