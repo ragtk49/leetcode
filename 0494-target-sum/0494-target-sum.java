@@ -9,7 +9,7 @@ class Solution {
     }
     private int helper(int index, int sum){
         //base
-        if(index > nums.length) return 0;
+        // if(index > nums.length) return 0;
         if(index == nums.length){
             if(sum == target) count++;
         }
