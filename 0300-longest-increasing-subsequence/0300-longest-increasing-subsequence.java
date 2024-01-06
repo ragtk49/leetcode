@@ -1,32 +1,35 @@
 class Solution {
-    int[][] cache;
+    int[] cache;
     public int lengthOfLIS(int[] nums) {
         if (nums == null || nums.length == 0) {
             return 0;
         }
-        cache = new int[nums.length][nums.length + 1];
+        cache = new int[nums.length];
+        int maxLIS = 0;
         
-        for (int[] row : cache) {
-            Arrays.fill(row, -1);
+        for(int i = 0; i < nums.length; i++){
+            cache[i] = helper(nums, i);
+            maxLIS = Math.max(maxLIS, cache[i]);
         }
-
-        // Call the helper for the last index
-        return helper(nums, nums.length - 1, nums.length);
+        return maxLIS;
+        
     }
     
-    private int helper(int[] nums, int index, int prevIndex){
-        if (index < 0) return 0;
-        if (cache[index][prevIndex] != -1) return cache[index][prevIndex];
-
-        int taken = 0;
-        if (prevIndex == nums.length || nums[index] < nums[prevIndex]) {
-            taken = 1 + helper(nums, index - 1, index);
-        }
-        int notTaken = helper(nums, index - 1, prevIndex);
-
-        cache[index][prevIndex] = Math.max(taken, notTaken);
+    private int helper(int[] nums, int index){
+        if(cache[index] != 0) return cache[index];
         
-        return cache[index][prevIndex];
+        int curVal = nums[index];
+        int maxLIS = 0;
+        
+        for(int i = index + 1; i < nums.length; i++){
+            if(curVal < nums[i]){
+                maxLIS = Math.max(maxLIS, helper(nums, i));
+            }
+        }
+        
+        cache[index] = maxLIS + 1;
+        
+        return cache[index];
 
     }
  
