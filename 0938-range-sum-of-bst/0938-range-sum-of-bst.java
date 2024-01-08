@@ -15,23 +15,34 @@
  */
 class Solution {
     public int rangeSumBST(TreeNode root, int low, int high) {
-        if(root == null) return 0;
-        
-        return helper(root, low, high);
-    }
-    
-    private int helper(TreeNode root,int low, int high){
-        //base
-        if(root == null) return 0;
+        if (root == null) return 0;
+
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode current = root;
         int sum = 0;
-        if(root.val >= low && root.val <= high){
-            sum += root.val;
+
+        // In-order traversal using a stack
+        while (current != null || !stack.isEmpty()) {
+            // Push left children onto the stack
+            while (current != null) {
+                stack.push(current);
+                current = current.left;
+            }
+
+            current = stack.pop();
+
+            // If the current node's value is within the range, add it to the sum
+            if (current.val >= low && current.val <= high) {
+                sum += current.val;
+            }
+
+            // If the current value exceeds 'high', break the loop as all remaining nodes will be greater
+            if (current.val > high) break;
+
+            // Move to the right child
+            current = current.right;
         }
-        
-        sum = sum + helper(root.left, low, high);
-        sum = sum + helper(root.right, low, high);
-        
-        
+
         return sum;
     }
 }
