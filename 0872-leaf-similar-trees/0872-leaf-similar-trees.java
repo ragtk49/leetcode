@@ -14,29 +14,30 @@
  * }
  */
 class Solution {
-    List<Integer> arr1;
-    List<Integer> arr2;
     public boolean leafSimilar(TreeNode root1, TreeNode root2) {
-        arr1 = new ArrayList();
-        arr2 = new ArrayList();
-        if(root1 == null || root2 == null) return false;
-        
-        helper(root1, arr1);
-        helper(root2, arr2);
-        
-        return arr1.equals(arr2);
+        Stack<TreeNode> stack1 = new Stack<>();
+        Stack<TreeNode> stack2 = new Stack<>();
+        stack1.push(root1);
+        stack2.push(root2);
+
+        while (!stack1.isEmpty() && !stack2.isEmpty()) {
+            if (nextLeaf(stack1) != nextLeaf(stack2)) {
+                return false;
+            }
+        }
+
+        return stack1.isEmpty() && stack2.isEmpty();
     }
     
-    private List<Integer> helper(TreeNode root, List<Integer> leaves){
-        //base
-        if(root == null) return leaves;
-        if(root.left == null && root.right == null){
-            leaves.add(root.val);
+    private int nextLeaf(Stack<TreeNode> stack) {
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            if (node.right != null) stack.push(node.right);
+            if (node.left != null) stack.push(node.left);
+            if (node.left == null && node.right == null) {
+                return node.val;  // Return the leaf node value
+            }
         }
-        
-        helper(root.left, leaves);
-        helper(root.right, leaves);
-        
-        return leaves;
+        return -1; // This should not happen if the tree is not empty
     }
 }
