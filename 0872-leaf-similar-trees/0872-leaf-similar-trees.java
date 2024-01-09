@@ -27,14 +27,16 @@ class Solution {
         return arr1.equals(arr2);
     }
     
-    private void helper(TreeNode root, List<Integer> leaves){
+    private List<Integer> helper(TreeNode root, List<Integer> leaves){
         //base
-        if(root == null) return;
+        if(root == null) return leaves;
         if(root.left == null && root.right == null){
             leaves.add(root.val);
         }
         
         helper(root.left, leaves);
         helper(root.right, leaves);
+        
+        return leaves;
     }
 }
